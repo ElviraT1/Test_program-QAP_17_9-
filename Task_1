@@ -1,0 +1,49 @@
+array = input('Введите числа через пробел:').split()
+array_int = [int(i) for i in array]
+
+while True:
+    try:
+        digit = int(input("Введите от 0 до 99: "))
+        if digit < 0 or digit > 99:
+            raise Exception
+        break
+    except ValueError:
+        print("Введены некорректные данные. Введите число цифрами.")
+    except Exception:
+        print("Число не входит в диапазон от 0 до 99.")
+
+array_int.append(digit)
+count = 0
+
+for i in range(1, len(array_int)):
+    x = array_int[i]
+    j = i
+    while j > 0 and array_int[j-1] > x:
+        array_int[j] = array_int[j-1]
+        j -= 1
+        count += 1
+    array_int[j] = x
+
+def bin_search(array_int, digit, left, right):
+    if left > right:
+        return False
+    middle = (right + left) // 2
+    if digit == array_int[middle + 1]:
+        return middle
+    elif digit < array_int[middle + 1]:
+        return bin_search(array_int, digit, left, middle - 1)
+    else:
+        return bin_search(array_int, digit, middle + 1, right)
+
+a = array_int.index(digit)
+binary_search = bin_search(array_int, digit, 0, len(array))
+
+print("Новый список: ", array_int)
+print("Итераций при сортировке: ", count)
+print("Позиция числа", digit, "в списке:", a)
+
+if binary_search > 0:
+    print("Позиция элемента, который меньше числа", digit,":",
+          bin_search(array_int, digit, 0, len(array_int)))
+else:
+    print("Перед числом", digit, "элементы отсутствуют.")
